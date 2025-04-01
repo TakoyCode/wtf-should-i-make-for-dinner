@@ -5,7 +5,8 @@ import FoodCard from '@/components/FoodCard.vue'
 export default {
   data() {
     return {
-      randomFoodDish: {},
+      foodDishes: [],
+      foodDish: {},
       isLoading: true,
     }
   },
@@ -16,13 +17,23 @@ export default {
     async getRandomDinner() {
       try {
         const response = await axios.get('/api/recipe')
-        this.randomFoodDish = response.data
+        this.foodDishes.push(response.data)
+        this.foodDish = response.data
       } catch (error) {
         console.error(error)
       } finally {
         this.isLoading = false
       }
     },
+
+    getOldDinner() {
+      const index = this.foodDishes.findIndex((foodDish) => {
+        foodDish === this.foodDish
+      })
+      console.log(index)
+    },
+
+    getNewDinner() {},
   },
   async mounted() {
     this.getRandomDinner()
@@ -37,14 +48,30 @@ export default {
     <h1 class="text-4xl font-bold my-5">Make Some</h1>
 
     <div class="flex flex-col items-center flex-grow max-h-[50vh] overflow-auto">
-      <FoodCard :food-dish="randomFoodDish" />
+      <FoodCard :food-dish="foodDish" />
     </div>
-    <button
-      @click="getRandomDinner"
-      class="text-white bg-gray-800 font-medium rounded-lg mt-4 px-5 py-2.5 hover:bg-gray-700 hover:cursor-pointer"
-    >
-      Get Another Random Dinner
-    </button>
+    <div class="mt-4">
+      <button
+        @click="getOldDinner"
+        class="text-white bg-gray-800 font-medium rounded-lg px-5 py-2.5 hover:bg-gray-700 hover:cursor-pointer"
+        :disabled="foodDish === foodDishes[0]"
+      >
+        <-
+      </button>
+      <button
+        @click="getRandomDinner"
+        class="text-white bg-gray-800 font-small rounded-lg mx-3 px-5 py-2.5 hover:bg-gray-700 hover:cursor-pointer"
+      >
+        Get Another Random Dinner
+      </button>
+      <button
+        @click="getNewDinner"
+        :class="`text-white bg-gray-800 font-medium rounded-lg px-5 py-2.5 hover:bg-gray-700 hover:cursor-pointer`"
+        :disabled="foodDish === foodDishes[foodDishes.length - 1]"
+      >
+        ->
+      </button>
+    </div>
   </div>
 </template>
 
