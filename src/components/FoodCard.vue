@@ -35,7 +35,12 @@ export default {
       </h1>
 
       <div class="my-1">
-        <i v-for="i in foodDish.rating" class="pi pi-star"></i>
+        <i
+          v-for="i in 5"
+          :class="`text-yellow-600 pi ${i <= foodDish.ratingPrecise ? 'pi-star-fill' : 'pi-star'}`"
+        >
+        </i>
+
         <span class="mx-1"> {{ foodDish.ratingPrecise }}</span>
       </div>
 
@@ -59,7 +64,9 @@ export default {
 
         <div>
           <i class="pi pi-user"></i>
-          <span class="mx-1">{{ foodDish.portions }} posjoner</span>
+          <span class="mx-1"
+            >{{ foodDish.portions }} porsjon{{ foodDish.portions <= 1 ? '' : 'er' }}</span
+          >
         </div>
       </div>
     </div>
